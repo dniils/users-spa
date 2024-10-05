@@ -4,11 +4,7 @@ defineProps(["user"]);
 
 <template>
   <div class="w-full shadow rounded-md overflow-hidden flex flex-col">
-    <img
-      src="https://placehold.co/400"
-      alt="image"
-      class="w-full h-40 object-cover"
-    />
+    <img :src="user.imageSource" alt="image" class="w-full h-40 object-cover" />
 
     <div class="p-2 flex-grow flex flex-col justify-between">
       <h2 class="font-bold text-center">{{ user.name }}</h2>

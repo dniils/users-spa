@@ -2,26 +2,22 @@
 import { ref, onMounted } from "vue";
 import UserCard from "./components/UserCard.vue";
 import User from "./types";
+import { fetchUsers } from "./api/fetchUsers";
+import { getImageSrc } from "./api/getImageSource";
 
 const users = ref<User[]>([]);
 
-async function fetchUsers() {
-  try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+async function getUsers(): Promise<void> {
+  const data = await fetchUsers();
+  if (data) users.value = data;
 
-    if (!response.ok) {
-      throw new Error(`${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    users.value = data;
-  } catch (error) {
-    console.log(error);
-  }
+  users.value.map(async (user) => {
+    user.imageSource = getImageSrc(user.email);
+  });
 }
 
 onMounted(() => {
-  fetchUsers();
+  getUsers();
 });
 </script>
 

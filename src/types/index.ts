@@ -3,6 +3,7 @@ export default interface User {
   name: string;
   username: string;
   email: string;
+  imageSource: string;
   address: {
     street: string;
     suite: string;
