@@ -1,22 +1,24 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import UserCard from "./components/UserCard.vue";
+import User from "./types";
+import { fetchUsers } from "./api/fetchUsers";
+import { getImageSrc } from "./api/getImageSource";
 
-const users = ref([
-  { id: 0, name: "Tamadur Demian", email: "email@mail.com" },
-  {
-    id: 1,
-    name: "Namrata Chakrabarti",
-    email: "email@mail.com",
-  },
-  {
-    id: 2,
-    name: "Borislav Gusev",
-    email: "email@mail.com",
-  },
-  { id: 3, name: "Zuhayr Hamdan", email: "email@mail.com" },
-  { id: 4, name: "Riche Gosse", email: "email@mail.com" },
-]);
+const users = ref<User[]>([]);
+
+async function getUsers(): Promise<void> {
+  const data = await fetchUsers();
+  if (data) users.value = data;
+
+  users.value.map(async (user) => {
+    user.imageSource = getImageSrc(user.email);
+  });
+}
+
+onMounted(() => {
+  getUsers();
+});
 </script>
 
 <template>
