@@ -39,11 +39,11 @@ onMounted(() => {
 
 <template>
   <div class="container mx-auto px-4">
-    <h1 class="text-2xl font-bold text-center mb-6">User Cards</h1>
+    <h1 class="text-2xl font-bold text-center mb-6">Users</h1>
 
     <input
       type="text"
-      class="flex mx-auto w-full sm:w-1/2 lg:w-1/3 px-4 py-2 border border-slate-300 rounded-full mb-5"
+      class="flex mx-auto w-full sm:w-96 px-4 py-2 border border-slate-300 rounded-full mb-5"
       placeholder="Start typing name..."
       v-model.trim="inputValue"
       @input="inputEventHandler"
