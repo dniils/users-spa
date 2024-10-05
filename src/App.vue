@@ -1,22 +1,28 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import UserCard from "./components/UserCard.vue";
+import User from "./types";
 
-const users = ref([
-  { id: 0, name: "Tamadur Demian", email: "email@mail.com" },
-  {
-    id: 1,
-    name: "Namrata Chakrabarti",
-    email: "email@mail.com",
-  },
-  {
-    id: 2,
-    name: "Borislav Gusev",
-    email: "email@mail.com",
-  },
-  { id: 3, name: "Zuhayr Hamdan", email: "email@mail.com" },
-  { id: 4, name: "Riche Gosse", email: "email@mail.com" },
-]);
+const users = ref<User[]>([]);
+
+async function fetchUsers() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/users");
+
+    if (!response.ok) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    users.value = data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+onMounted(() => {
+  fetchUsers();
+});
 </script>
 
 <template>
