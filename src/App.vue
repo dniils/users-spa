@@ -1,22 +1,31 @@
 <script setup lang="ts">
-import HelloWorld from "./components/HelloWorld.vue";
+import { ref } from "vue";
+import UserCard from "./components/UserCard.vue";
+
+const users = ref([
+  { id: 0, name: "Tamadur Demian", email: "email@mail.com" },
+  {
+    id: 1,
+    name: "Namrata Chakrabarti",
+    email: "email@mail.com",
+  },
+  {
+    id: 2,
+    name: "Borislav Gusev",
+    email: "email@mail.com",
+  },
+  { id: 3, name: "Zuhayr Hamdan", email: "email@mail.com" },
+  { id: 4, name: "Riche Gosse", email: "email@mail.com" },
+]);
 </script>
 
 <template>
-  <HelloWorld msg="Hello, World!" />
+  <div class="container mx-auto px-4">
+    <h1 class="text-2xl font-bold text-center mb-6">User Cards</h1>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+    >
+      <UserCard v-for="user in users" :key="user.id" :user="user" />
+    </div>
+  </div>
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
