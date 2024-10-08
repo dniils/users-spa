@@ -23,7 +23,7 @@ async function getUsers(): Promise<void> {
   isLoading.value = false;
 }
 
-const usersToDisplay = computed(() => {
+const usersToDisplay: ComputedRef<User[]> = computed((): User[] => {
   const searchTerm = inputValue.value.trim().toLowerCase();
   const filteredUsers = inputValue.value.trim()
     ? users.value.filter((user) => user.name.toLowerCase().includes(searchTerm))
