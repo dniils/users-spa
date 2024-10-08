@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, ComputedRef } from "vue";
+import LoadingSpinner from "./components/LoadingSpinner.vue";
 import UserCard from "./components/UserCard.vue";
 import User from "./types";
 import { fetchUsers } from "./api/fetchUsers";
@@ -9,6 +10,7 @@ const users = ref<User[]>([]);
 const inputValue = ref<string>("");
 const currentPage = ref<number>(1);
 const rowsPerPage = ref<number>(10);
+const isLoading = ref<boolean>(true);
 
 async function getUsers(): Promise<void> {
   const data = await fetchUsers();
@@ -17,6 +19,8 @@ async function getUsers(): Promise<void> {
   users.value.forEach(async (user) => {
     user.imageSource = getImageSrc(user.email);
   });
+
+  isLoading.value = false;
 }
 
 const usersToDisplay = computed(() => {
@@ -82,7 +86,10 @@ onMounted(() => {
       v-model.trim="inputValue"
     />
 
+    <LoadingSpinner v-if="isLoading" />
+
     <ul
+      v-else
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
     >
       <li v-for="user in usersToDisplay" :key="user.id">
