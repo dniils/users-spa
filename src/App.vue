@@ -2,28 +2,35 @@
 import { ref, onMounted, computed, ComputedRef } from "vue";
 import LoadingSpinner from "./components/LoadingSpinner.vue";
 import UserCard from "./components/UserCard.vue";
-import User from "./types";
+import { User } from "./types";
 import { fetchUsers } from "./api/fetchUsers";
 import { getImageSrc } from "./api/getImageSource";
 
 const users = ref<User[]>([]);
-const inputValue = ref<string>("");
-const currentPage = ref<number>(1);
-const rowsPerPage = ref<number>(10);
-const isLoading = ref<boolean>(true);
+const inputValue = ref("");
+const currentPage = ref(1);
+const rowsPerPage = ref(10);
+const isLoading = ref(false);
 
 async function getUsers(): Promise<void> {
-  const data = await fetchUsers();
-  if (data) users.value = data;
+  isLoading.value = true;
 
-  users.value.forEach(async (user) => {
-    user.imageSource = getImageSrc(user.email);
-  });
-
-  isLoading.value = false;
+  try {
+    const data = await fetchUsers();
+    if (data) {
+      users.value = data.map((user) => ({
+        ...user,
+        imageSource: getImageSrc(user.email),
+      }));
+    }
+  } catch (err) {
+    console.error(err);
+  } finally {
+    isLoading.value = false;
+  }
 }
 
-const usersToDisplay: ComputedRef<User[]> = computed((): User[] => {
+const usersToDisplay: ComputedRef<User[]> = computed(() => {
   const searchTerm = inputValue.value.trim().toLowerCase();
   const filteredUsers = inputValue.value.trim()
     ? users.value.filter((user) => user.name.toLowerCase().includes(searchTerm))
@@ -34,7 +41,7 @@ const usersToDisplay: ComputedRef<User[]> = computed((): User[] => {
   return filteredUsers.slice(start, end);
 });
 
-const totalRecords: ComputedRef<number> = computed((): number => {
+const totalRecords: ComputedRef<number> = computed(() => {
   return inputValue.value.trim()
     ? users.value.filter((user) =>
         user.name.toLowerCase().includes(inputValue.value.trim().toLowerCase())
@@ -50,7 +57,7 @@ function pageChangeEventHandler(event: { first: number; rows: number }): void {
   });
 }
 
-const rowsPerPageOptions: ComputedRef<number[]> = computed((): number[] => {
+const rowsPerPageOptions: ComputedRef<number[]> = computed(() => {
   const options = [];
   const step = 5;
   const maxOptions = 100;
