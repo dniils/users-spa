@@ -8,6 +8,7 @@ This SPA fetches user data from [jsonplaceholder](https://jsonplaceholder.typico
 - **Pagination:** implemented using [PrimeVue Paginator](https://primevue.org/paginator/), allowing for navigation through the user list. Options for items per page are dynamically calculated based on the total number of users to display.
 - **Loading State:** a loading spinner is displayed while user data is being fetched.
 - **Image Loading State:** skeleton loaders are shown until profile images are fully loaded, enhancing the user experience.
+- **User Detail Popup:** when a user card is clicked, a popup displays detailed information about the selected user.
 
 ## Technologies Used
 `Vue` `TypeScript` `Vite` `Tailwind CSS`
