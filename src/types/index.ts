@@ -22,3 +22,5 @@ export interface User {
     bs: string;
   };
 }
+
+export type UserInfoEntry = [key: keyof User, value: User[keyof User]];

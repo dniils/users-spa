@@ -2,6 +2,7 @@
 import { ref, onMounted, computed, ComputedRef } from "vue";
 import LoadingSpinner from "./components/LoadingSpinner.vue";
 import UserCard from "./components/UserCard.vue";
+import UserPopup from "./components/UserPopup.vue";
 import { User } from "./types";
 import { fetchUsers } from "./api/fetchUsers";
 import { getImageSrc } from "./api/getImageSource";
@@ -11,6 +12,8 @@ const inputValue = ref("");
 const currentPage = ref(1);
 const rowsPerPage = ref(10);
 const isLoading = ref(false);
+const selectedUserInfo = ref<User | null>(null);
+const popupIsActive = ref(false);
 
 async function getUsers(): Promise<void> {
   isLoading.value = true;
@@ -77,6 +80,18 @@ const rowsPerPageOptions: ComputedRef<number[]> = computed(() => {
   return options;
 });
 
+function getUserInfo(user: User): void {
+  selectedUserInfo.value = user;
+  popupIsActive.value = true;
+}
+
+function closePopup(): void {
+  if (popupIsActive.value) {
+    popupIsActive.value = false;
+    selectedUserInfo.value = null;
+  }
+}
+
 onMounted(() => {
   getUsers();
 });
@@ -100,9 +115,16 @@ onMounted(() => {
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
     >
       <li v-for="user in usersToDisplay" :key="user.id">
-        <UserCard :user="user" />
+        <UserCard :user="user" @click="getUserInfo(user)" />
       </li>
     </ul>
+
+    <UserPopup
+      :isActive="popupIsActive"
+      :selected-user-info="selectedUserInfo"
+      @closePopup="closePopup"
+    />
+
     <Paginator
       :rows="rowsPerPage"
       :totalRecords="totalRecords"

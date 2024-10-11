@@ -10,7 +10,9 @@ function handleImageLoad() {
 </script>
 
 <template>
-  <div class="w-full shadow rounded-md overflow-hidden flex flex-col">
+  <div
+    class="w-full shadow rounded-md overflow-hidden flex flex-col hover:shadow-md hover:cursor-pointer transition"
+  >
     <div
       v-if="isLoading"
       class="w-full h-64 sm:size-64 bg-slate-200 animate-pulse"
@@ -27,7 +29,7 @@ function handleImageLoad() {
       <h2 class="font-bold text-center">{{ user.name }}</h2>
       <ul class="pt-2">
         <li class="border-b-2 last:border-0">
-          <a :href="`mailto:${user.email}`">{{ user.email }}</a>
+          <a :href="`mailto:${user.email}`" @click.stop="">{{ user.email }}</a>
         </li>
       </ul>
     </div>
