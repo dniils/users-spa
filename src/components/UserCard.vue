@@ -7,6 +7,8 @@ defineProps<{
 }>();
 
 const { imageIsLoading, handleImageLoad } = useUserData();
+
+imageIsLoading.value = true;
 </script>
 
 <template>
