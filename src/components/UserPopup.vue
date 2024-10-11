@@ -2,17 +2,18 @@
 import { computed, ComputedRef } from "vue";
 import { User, UserInfoEntry } from "../types";
 import PopupCard from "./PopupCard.vue";
+import LoadingSpinner from "./LoadingSpinner.vue";
 
 const props = defineProps<{
   isActive: boolean;
   selectedUserInfo: User | null;
 }>();
 
-const userInfo: ComputedRef<UserInfoEntry[]> = computed(
+const userInfoEntries: ComputedRef<UserInfoEntry[]> = computed(
   () => Object.entries(props.selectedUserInfo ?? []) as UserInfoEntry[]
 );
 
-function closePopup() {
+function emitClosePopup() {
   emit("closePopup");
 }
 
@@ -22,11 +23,13 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <PopupCard :isActive="props.isActive" @closePopup="closePopup">
+  <PopupCard :isActive="props.isActive" @closePopup="emitClosePopup">
     <template #header> User Info </template>
-    <template #content v-if="selectedUserInfo">
-      <ul>
-        <li v-for="[key, value] in userInfo" :key="key">
+
+    <template #content>
+      <LoadingSpinner v-if="!selectedUserInfo" />
+      <ul v-else>
+        <li v-for="[key, value] in userInfoEntries" :key="key">
           <p>
             <b>{{ key }}</b
             >: {{ value }}

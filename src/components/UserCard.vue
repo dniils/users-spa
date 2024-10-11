@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { User } from "../types";
+import { useUserData } from "../composables/useUserData";
 
-defineProps(["user"]);
-const isLoading = ref(true);
+defineProps<{
+  user: User;
+}>();
 
-function handleImageLoad() {
-  isLoading.value = false;
-}
+const { imageIsLoading, handleImageLoad } = useUserData();
 </script>
 
 <template>
@@ -14,11 +14,11 @@ function handleImageLoad() {
     class="w-full shadow rounded-md overflow-hidden flex flex-col hover:shadow-md hover:cursor-pointer transition"
   >
     <div
-      v-if="isLoading"
+      v-if="imageIsLoading"
       class="w-full h-64 sm:size-64 bg-slate-200 animate-pulse"
     ></div>
     <img
-      v-show="!isLoading"
+      v-show="!imageIsLoading"
       :src="user.imageSource"
       alt="image"
       class="w-full h-64 object-cover"
